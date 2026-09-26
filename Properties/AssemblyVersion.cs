@@ -6,9 +6,9 @@
 
 using System.Reflection;
 
-[assembly: AssemblyVersion("2.0.0.0")] // only the major version gets changed
-[assembly: AssemblyFileVersion("2.7.0.0")]
-[assembly: KSPAssembly("AudioMufflerRedux", 2, 7, 0)]
+[assembly: AssemblyVersion("3.0.0.0")] // only the major version gets changed
+[assembly: AssemblyFileVersion("3.0.0.0")]
+[assembly: KSPAssembly("AudioMufflerRedux", 3, 0, 0)]
 [assembly: KSPAssemblyDependency("ToolbarController", 1, 0)]
 [assembly: KSPAssemblyDependency("ClickThroughBlocker", 1, 0)]
 [assembly: AssemblyMetadata("HotReload", "true")]

@@ -16,7 +16,7 @@ namespace AudioMuffler
 		private Dictionary<int, Part> soundIDToPart = new Dictionary<int, Part>(); //id is used to not mess with weak references to audio sources
 		private Dictionary<int, Part> soundIDToPartIVA = new Dictionary<int, Part>(); //using a separate storage for internal model audio sources as they have completely different reference system
 
-		public void rebuildCache(AudioSource[] audioSources) {
+		public void RebuildCache(AudioSource[] audioSources) {
 			Stopwatch performanceWatch = Stopwatch.StartNew();
 
 			soundIDToPart.Clear();
@@ -35,20 +35,18 @@ namespace AudioMuffler
 				}
 			}
 			/*foreach (KeyValuePair<int, Part> entry in soundIDToPart) {
-				UnityEngine.Debug.Log("ENTRY: " + entry.Key + " " + entry.Value.name);
+				Log("ENTRY: " + entry.Key + " " + entry.Value.name);
 			}*/
 			performanceWatch.Stop();
-			KSPLog.print("AudioMuffler: VesselSoundsCache rebuild time = " + performanceWatch.ElapsedMilliseconds);
+			Muffler.DebugLog($"AudioMuffler: VesselSoundsCache rebuild time = {performanceWatch.ElapsedMilliseconds}");
 		}
 		
-		public Part getPartFor(AudioSource audioSource) {
-			Part part;
-			return soundIDToPart.TryGetValue(audioSource.GetInstanceID(), out part) ? part : null;
-		}
+		public Part GetPartFor(AudioSource audioSource) {
+            return soundIDToPart.TryGetValue(audioSource.GetInstanceID(), out Part part) ? part : null;
+        }
 
-		public Part getPartForIVA(AudioSource audioSource) {
-			Part part;
-			return soundIDToPartIVA.TryGetValue(audioSource.GetInstanceID(), out part) ? part : null;
+		public Part GetPartForIVA(AudioSource audioSource) {
+			return soundIDToPartIVA.TryGetValue(audioSource.GetInstanceID(), out Part part) ? part : null;
 		}
 		
 	}

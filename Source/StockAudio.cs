@@ -29,9 +29,9 @@ namespace AudioMuffler {
 		public static void prepareAudioSources(AudioMixerFacade audioMixer, AudioSource[] audioSources) {
 			for (int i = 0; i < audioSources.Length; i++) {
 				if (isAmbient(audioSources[i])) {
-					audioSources[i].outputAudioMixerGroup = audioMixer.outsideGroup;
+					audioSources[i].outputAudioMixerGroup = audioMixer.OutsideGroup;
 				} else if (isInVessel(audioSources[i])) {
-					audioSources[i].outputAudioMixerGroup = audioMixer.inVesselGroup;
+					audioSources[i].outputAudioMixerGroup = audioMixer.InVesselGroup;
 				}
 			}
 		}

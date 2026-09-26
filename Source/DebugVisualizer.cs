@@ -13,7 +13,7 @@ namespace AudioMuffler
 		{
 		}
 
-		private static void initializeMaterial() {
+		private static void InitializeMaterial() {
 			if (material == null) {
 				//material = new Material(Shader.Find("Specular"));
 				/*material = new Material( "Shader \"Lines/Colored Blended\" {" +
@@ -39,20 +39,21 @@ namespace AudioMuffler
 			material.SetInt("_ZTest", 0);
 		}
 
-		private static Vector3 CT(Vector3 vector, bool asInternal = false) {
-			if (1 == 1)
-				return vector;
-			if (CameraManager.Instance.currentCameraMode == CameraManager.CameraMode.IVA || CameraManager.Instance.currentCameraMode == CameraManager.CameraMode.Internal) {
-				if (asInternal) {
-					return vector;
-				}
-				return InternalSpace.WorldToInternal(vector);
-			}
+		private static Vector3 CT(Vector3 vector, bool asInternal = false)
+		{
+			//if (1 == 1)
+			//	return vector;
+			//if (CameraManager.Instance.currentCameraMode == CameraManager.CameraMode.IVA || CameraManager.Instance.currentCameraMode == CameraManager.CameraMode.Internal) {
+			//	if (asInternal) {
+			//		return vector;
+			//	}
+			//	return InternalSpace.WorldToInternal(vector);
+			//}
 			return vector;
 		}
 
-		public static void drawPartMeshes(Color color) {
-			initializeMaterial();
+		public static void DrawPartMeshes(Color color) {
+			InitializeMaterial();
 			material.SetPass(0);
 			GL.PushMatrix();
 			GL.Begin(GL.LINES);
@@ -116,8 +117,8 @@ namespace AudioMuffler
 
 		}
 
-		public static void visualizeAudioSources(AudioSource[] audiosources, Color color) {
-			initializeMaterial();
+		public static void VisualizeAudioSources(AudioSource[] audiosources, Color color) {
+			InitializeMaterial();
 			material.SetPass(0);
 			GL.PushMatrix();
 			GL.Begin(GL.LINES);
@@ -133,8 +134,8 @@ namespace AudioMuffler
 			GL.PopMatrix();
 		}
 
-		public static void visualizeTransform(Transform transform, Color color) {
-			initializeMaterial();
+		public static void VisualizeTransform(Transform transform, Color color) {
+			InitializeMaterial();
 			material.SetPass(0);
 			Color colorOffset = new Color(0.3f, 0.3f, 0.3f, 0);
 			GL.PushMatrix();

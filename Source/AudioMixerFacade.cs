@@ -14,48 +14,48 @@ namespace AudioMuffler {
 		
 		private static AudioMixer audioMixer;
 		
-		public AudioMixerGroup masterGroup {get; set;}
-		public AudioMixerGroup inVesselGroup {get; set;}
-		public AudioMixerGroup outsideGroup {get; set;}
-		public AudioMixerGroup helmetGroup {get; set;}
+		public AudioMixerGroup MasterGroup {get; set;}
+		public AudioMixerGroup InVesselGroup {get; set;}
+		public AudioMixerGroup OutsideGroup {get; set;}
+		public AudioMixerGroup HelmetGroup {get; set;}
 		
-		public void muteInVessel(bool mute) {
+		public void MuteInVessel(bool mute) {
 			audioMixer.SetFloat("InVesselVolume", mute ? -80 : 0);
 		}
 
-		public void muteOutside(bool mute) {
+		public void MuteOutside(bool mute) {
 			audioMixer.SetFloat("OutsideVolume", mute ? -80 : 0);
 		}
 
-		public void setInVesselVolume(float volume) {
+		public void SetInVesselVolume(float volume) {
 			audioMixer.SetFloat("InVesselVolume", volume);
 		}
 
-		public void setInVesselCutoff(float cutoff) {
+		public void SetInVesselCutoff(float cutoff) {
 			audioMixer.SetFloat("InVesselCutoff", cutoff);
 		}
 
-		public void setOutsideVolume(float volume) {
+		public void SetOutsideVolume(float volume) {
 			audioMixer.SetFloat("OutsideVolume", volume);
 		}
 		
-		public void setOutsideCutoff(float cutoff) {
+		public void SetOutsideCutoff(float cutoff) {
 			audioMixer.SetFloat("OutsideCutoff", cutoff);
 		}
 
-		public void muteHelmet(bool mute) {
+		public void MuteHelmet(bool mute) {
 			audioMixer.SetFloat("HelmetVolume", mute ? -80 : 0);
 		}
 		
-		public static AudioMixerFacade initializeMixer(string path) {
+		public static AudioMixerFacade InitializeMixer(string path) {
 			AudioMixerFacade instance = new AudioMixerFacade ();
 			if (audioMixer == null) {
-				audioMixer = LoadBundle (path);
+				audioMixer = LoadBundle(path);
 			}
-			instance.masterGroup = audioMixer.FindMatchingGroups("Master") [0];
-			instance.inVesselGroup = audioMixer.FindMatchingGroups("InVessel") [0];
-			instance.outsideGroup = audioMixer.FindMatchingGroups("Outside") [0];
-			instance.helmetGroup = audioMixer.FindMatchingGroups("Helmet") [0];
+			instance.MasterGroup = audioMixer.FindMatchingGroups("Master") [0];
+			instance.InVesselGroup = audioMixer.FindMatchingGroups("InVessel") [0];
+			instance.OutsideGroup = audioMixer.FindMatchingGroups("Outside") [0];
+			instance.HelmetGroup = audioMixer.FindMatchingGroups("Helmet") [0];
 			return instance;
 		}
 		
@@ -65,9 +65,9 @@ namespace AudioMuffler {
 				return null;
 			}
 			
-			using (WWW www = new WWW ("file://" + path)) {
+			using (WWW www = new WWW("file://" + path)) {
 				if (www.error != null) {
-					Debug.Log ("Audio Muffler: Mixer bundle not found!");
+					Muffler.Log("Mixer bundle not found!");
 					return null;
 				}
 	
@@ -75,8 +75,8 @@ namespace AudioMuffler {
 			
 				AudioMixer audioMixer = bundle.LoadAsset<AudioMixer> ("KSPAudioMixer");
 			
-				bundle.Unload (false);
-				www.Dispose ();
+				bundle.Unload(false);
+				www.Dispose();
 			
 				BundleLoaded = true;
 				return audioMixer;

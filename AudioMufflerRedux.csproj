@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
     <Reference Include="$(KSPRoot)\KSP_x64_Data\Managed\Assembly-CSharp*.dll" />
     <Reference Include="$(KSPRoot)\KSP_x64_Data\Managed\UnityEngine*.dll" />
+    <Reference Include="$(KSPRoot)\GameData\001_ToolbarControl\Plugins\ToolbarControl.dll" />
+    <Reference Include="$(KSPRoot)\GameData\000_ClickThroughBlocker\Plugins\ClickThroughBlocker.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\AudioMixerFacade.cs" />
@@ -62,6 +64,7 @@
       <DependentUpon>AssemblyVersion.tt</DependentUpon>
     </Compile>
     <Compile Include="Source\StockAudio.cs" />
+    <Compile Include="Source\Tooltip.cs" />
     <Compile Include="Source\VesselSoundsCache.cs" />
     <Compile Include="Source\VesselGeometryCache.cs" />
     <Compile Include="Source\DebugVisualizer.cs" />
@@ -81,9 +84,11 @@
     <None Include="GameData\AudioMufflerRedux\AudioMufflerRedux.version" />
     <None Include="GameData\AudioMufflerRedux\README.md" />
     <None Include="GameData\AudioMufflerRedux\PluginData\mixer.bundle" />
-    <None Include="GameData\AudioMufflerRedux\PluginData\muffler.cfg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AudioMufflerRedux.svg" />
+    <Content Include="GameData\AudioMufflerRedux\PluginData\ToolbarIcons\AudioMufflerRedux-24.png" />
+    <Content Include="GameData\AudioMufflerRedux\PluginData\ToolbarIcons\AudioMufflerRedux-64.png" />
     <Content Include="GameData\AudioMufflerRedux\Plugins\AudioMufflerRedux.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -92,25 +97,33 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PostBuildEvent>
-			del /f /q "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2&gt;nul
-			del /f /q "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\$(TargetName).pdb" 2&gt;nul
+			del /f /q "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2>nul
+			del /f /q "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\$(TargetName).pdb" 2>nul
 			xcopy /y /i "$(TargetPath)" "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\"
 			xcopy /y /i "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\"
 
-			del /f /q "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2&gt;nul
-			del /f /q "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\$(TargetName).pdb" 2&gt;nul
+			del /f /q "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2>nul
+			del /f /q "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\$(TargetName).pdb" 2>nul
 			xcopy /y /i "$(TargetPath)" "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\"
 			xcopy /y /i "$(TargetDir)$(TargetName).pdb" "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\"
-		</PostBuildEvent>
+			
+			del /f /q "$(KSPSTOCK)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2>nul
+            del /f /q "$(KSPSTOCK)\GameData\AudioMufflerRedux\Plugins\$(TargetName).pdb" 2>nul
+            xcopy /y /i "$(TargetPath)" "$(KSPSTOCK)\GameData\AudioMufflerRedux\Plugins\"
+            xcopy /y /i "$(TargetDir)$(TargetName).pdb" "$(KSPSTOCK)\GameData\AudioMufflerRedux\Plugins\"
+	</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PostBuildEvent>
-			del /f /q "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2&gt;nul
+			del /f /q "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2>nul
 			xcopy /y /i "$(TargetPath)" "$(SolutionDir)\GameData\AudioMufflerRedux\Plugins\"
 
-			del /f /q "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2&gt;nul
+			del /f /q "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2>nul
 			xcopy /y /i "$(TargetPath)" "$(KSPRoot)\GameData\AudioMufflerRedux\Plugins\"
-		</PostBuildEvent>
+			
+			del /f /q "$(KSPSTOCK)\GameData\AudioMufflerRedux\Plugins\$(TargetFileName)" 2>nul
+            xcopy /y /i "$(TargetPath)" "$(KSPSTOCK)\GameData\AudioMufflerRedux\Plugins\"
+	</PostBuildEvent>
   </PropertyGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="&quot;$(ProgramFiles)\Microsoft Visual Studio\2022\Community\Common7\IDE\TextTransform.exe&quot; &quot;$(ProjectDir)Properties\AssemblyVersion.tt&quot;" />

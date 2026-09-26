@@ -10,14 +10,14 @@ namespace AudioMuffler
 		public VesselGeometryCache vesselGeometry = new VesselGeometryCache();
 		public VesselSoundsCache vesselSounds  = new VesselSoundsCache();
 
-		private bool cachesInitialized = false;
+		internal bool cachesInitialized = false;
 
 		private int previousPartCount = int.MaxValue;
 		private Stopwatch stopWatch = new Stopwatch();
 		private int scheduledInterval = 0;
 		private bool scheduled = false;
 
-		public void setSchedule(int mininterval) {
+		public void SetSchedule(int mininterval) {
 			if (scheduled) {
 				return;
 			}
@@ -25,22 +25,22 @@ namespace AudioMuffler
 			scheduledInterval = mininterval;
 		}
 
-		public void rebuildAllCaches(AudioSource[] audioSources) {
+		public void RebuildAllCaches(AudioSource[] audioSources) {
 			previousPartCount = FlightGlobals.ActiveVessel.Parts.Count;
 			stopWatch.Stop();
 			stopWatch.Reset();
 
-			vesselGeometry.rebuildCache();
-			vesselSounds.rebuildCache(audioSources);
+			vesselGeometry.RebuildCache();
+			vesselSounds.RebuildCache(audioSources);
 
 			stopWatch.Start();
 			scheduled = false;
 		}
 
 		//This method is intended to be called every Update to trigger cache rebuild if it was scheduled
-		public void maintainCaches(AudioSource[] audioSources) {
+		public void MaintainCaches(AudioSource[] audioSources) {
 			if (!cachesInitialized) {
-				rebuildAllCaches(audioSources);
+				RebuildAllCaches(audioSources);
 				cachesInitialized = true;
 			} else {
 				//If active vessel wasn't changed and part count reduced then we should control frequency of cache rebuilds because 
@@ -49,7 +49,7 @@ namespace AudioMuffler
 				if (!scheduled || (stopWatch.ElapsedMilliseconds < scheduledInterval) && (FlightGlobals.ActiveVessel.Parts.Count < previousPartCount)) {
 					return;
 				} else {
-					rebuildAllCaches(audioSources);
+					RebuildAllCaches(audioSources);
 				}
 			}
 		}
