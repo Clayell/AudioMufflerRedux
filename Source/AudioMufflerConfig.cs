@@ -26,13 +26,14 @@ namespace AudioMuffler
         [KSPField(isPersistant = true)] public bool helmetInMapView = false;
         [KSPField(isPersistant = true)] public bool vesselInMapView = true;
         [KSPField(isPersistant = true)] public bool outsideInMapView = false;
+        [KSPField(isPersistant = true)] public bool roundValues = false;
         [KSPField(isPersistant = true)] public bool debug = false;
 
         [KSPField(isPersistant = true)] public int minCacheUpdateInterval = 300;
         [KSPField(isPersistant = true)] public float wallCutoff = 400;
         [KSPField(isPersistant = true)] public float minimalCutoff = 0;
 
-        [KSPField(isPersistant = true)] bool showMainWindow;
+        [KSPField(isPersistant = true)] bool showMainWindow = false;
         bool isKSPGUIActive = true; // for some reason, this initially only turns to true when you turn off and on the KSP GUI
         bool isLoading = false;
         bool isBadUI = false;
@@ -223,27 +224,42 @@ namespace AudioMuffler
         {
             if (HighLogic.LoadedScene != GameScenes.FLIGHT && HighLogic.LoadedScene != GameScenes.TRACKSTATION && HighLogic.LoadedScene != GameScenes.SPACECENTER) return;
 
-            if (BoolButtonAuto(ref enableMuffler, "Muffler", "Enable or disable the audio muffler."))
+            if (BoolButtonAuto(ref enableMuffler, "Muffler", "Enable or disable the audio muffler in flight.") && !enableMuffler)
             {
-
+                Muffler.Instance.RestoreAudio();
             }
-            BoolButtonAuto(ref helmetOutsideIVA, "Helmet Outside IVA", "Disable to hear cabin sounds only when inside a pod. This generally relates to 3rd party mods like Chatterer etc.");
-            BoolButtonAuto(ref helmetOutsideEVA, "Helmet Outside EVA", "Disable to hear helmet sounds (Chatterer etc.) only when the view is inside a kerbal (i.e. 1st person view).");
-            BoolButtonAuto(ref helmetForUnmanned, "Helmet For Unmanned", "Enable to hear all \"in helmet\" sounds in unmanned vessels even when viewing the vessel from outside.");
-            BoolButtonAuto(ref helmetInMapView, "Helmet In Map View", "Enable to hear helmet sounds (Chatterer etc.) in the Map View.");
-            BoolButtonAuto(ref vesselInMapView, "Vessel In Map View", "Disable if you don't want to hear sounds from distant parts of the active vessel in the Map View.");
-            BoolButtonAuto(ref outsideInMapView, "Outside In Map View", "Enable to hear sounds that are outside your vessel in the Map View (they will be muffled as in IVA mode).");
+            BoolButtonAuto(ref helmetOutsideIVA, "Helmet Outside IVA", "Hear cabin sounds only when inside a pod. This generally relates to 3rd party mods like Chatterer etc.");
+            BoolButtonAuto(ref helmetOutsideEVA, "Helmet Outside EVA", "Hear helmet sounds (Chatterer etc.) only when the view is inside a kerbal (i.e. 1st person view).");
+            BoolButtonAuto(ref helmetForUnmanned, "Helmet For Unmanned", "Hear all \"in helmet\" sounds in unmanned vessels even when viewing the vessel from outside.");
+            BoolButtonAuto(ref helmetInMapView, "Helmet In Map View", "Hear helmet sounds (Chatterer etc.) in the Map View.");
+            BoolButtonAuto(ref vesselInMapView, "Vessel In Map View", "Hear sounds from distant parts of the active vessel in the Map View.");
+            BoolButtonAuto(ref outsideInMapView, "Outside In Map View", "Hear sounds that are outside your vessel in the Map View.");
+            BoolButtonAuto(ref roundValues, "Round Values", "Round the update interval slider to the nearest 10 and the frequency sliders to the nearest 100.");
             BoolButtonAuto(ref debug, "Debug", "Spew various messages as stuff happens inside the plugin.");
 
-            LabelValue("Minimum Cache Update Interval", $"{minCacheUpdateInterval} ms", labelToolTip: "Performance setting in milliseconds. Too low may cause lags on active vessel crash, too high may render the cache ineffective and cause FPS drops in flight.");
-            minCacheUpdateInterval = (int)GUILayout.HorizontalSlider(minCacheUpdateInterval, 10, 1000);
+            if (roundValues)
+            {
+                LabelValue("Minimum Cache Update Interval", $"{minCacheUpdateInterval} ms", labelToolTip: "Performance setting in milliseconds. Too low may cause lags on active vessel crash, too high may render the cache ineffective and cause FPS drops in flight.");
+                minCacheUpdateInterval = (int)(GUILayout.HorizontalSlider(minCacheUpdateInterval, 10, 1000) / 10f) * 10;
 
-            LabelValueFloat("Wall Cutoff Frequency", wallCutoff, "hz", "Sound that pass through a part's wall will be reduced to this frequency.");
-            wallCutoff = Mathf.Round(GUILayout.HorizontalSlider(wallCutoff, 0f, 10000f));
+                LabelValueFloat("Wall Cutoff Frequency", wallCutoff, "hz", "Sound that pass through a part's wall will be reduced to this frequency.");
+                wallCutoff = Mathf.Round(GUILayout.HorizontalSlider(wallCutoff, 0f, Muffler.maxFrequency) / 100f) * 100f;
 
-            LabelValueFloat("Minimal Cutoff Frequency", minimalCutoff, "hz", "Minimal frequency to which sound is reduced by air sparseness. 300 is the setting of the old Audio Muffler (makes sounds become a deep bass rumble in vacuum instead of total silence).");
-            minimalCutoff = Mathf.Round(GUILayout.HorizontalSlider(minimalCutoff, 0f, 10000f));
+                LabelValueFloat("Minimal Cutoff Frequency", minimalCutoff, "hz", "Minimal frequency to which sound is reduced by air sparseness. 300 is the setting of the old Audio Muffler (makes sounds become a deep bass rumble in vacuum instead of total silence).");
+                minimalCutoff = Mathf.Round(GUILayout.HorizontalSlider(minimalCutoff, 0f, Muffler.maxFrequency) / 100f) * 100f;
+            }
+            else
+            {
+                LabelValue("Minimum Cache Update Interval", $"{minCacheUpdateInterval} ms", labelToolTip: "Performance setting in milliseconds. Too low may cause lags on active vessel crash, too high may render the cache ineffective and cause FPS drops in flight.");
+                minCacheUpdateInterval = (int)GUILayout.HorizontalSlider(minCacheUpdateInterval, 10, 1000);
 
+                LabelValueFloat("Wall Cutoff Frequency", wallCutoff, "hz", "Sound that pass through a part's wall will be reduced to this frequency.");
+                wallCutoff = GUILayout.HorizontalSlider(wallCutoff, 0f, Muffler.maxFrequency);
+
+                LabelValueFloat("Minimal Cutoff Frequency", minimalCutoff, "hz", "Minimal frequency to which sound is reduced by air sparseness. 300 is the setting of the old Audio Muffler (makes sounds become a deep bass rumble in vacuum instead of total silence).");
+                minimalCutoff = GUILayout.HorizontalSlider(minimalCutoff, 0f, Muffler.maxFrequency);
+            }
+            
             if (GUILayout.Button(new GUIContent("Reset to Default", "Reset to Default Settings.")))
             {
                 enableMuffler = true;

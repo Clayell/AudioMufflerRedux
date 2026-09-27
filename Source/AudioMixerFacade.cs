@@ -13,13 +13,19 @@ namespace AudioMuffler {
 		private static bool BundleLoaded = false;
 		
 		private static AudioMixer audioMixer;
-		
+
 		public AudioMixerGroup MasterGroup {get; set;}
 		public AudioMixerGroup InVesselGroup {get; set;}
 		public AudioMixerGroup OutsideGroup {get; set;}
 		public AudioMixerGroup HelmetGroup {get; set;}
-		
-		public void MuteInVessel(bool mute) {
+
+		float inVesselVolume;
+		float outsideVolume;
+		float inVesselCutoff;
+		float outsideCutoff;
+		float helmetVolume;
+
+        public void MuteInVessel(bool mute) {
 			audioMixer.SetFloat("InVesselVolume", mute ? -80 : 0);
 		}
 
@@ -52,12 +58,28 @@ namespace AudioMuffler {
 			if (audioMixer == null) {
 				audioMixer = LoadBundle(path);
 			}
-			instance.MasterGroup = audioMixer.FindMatchingGroups("Master") [0];
-			instance.InVesselGroup = audioMixer.FindMatchingGroups("InVessel") [0];
-			instance.OutsideGroup = audioMixer.FindMatchingGroups("Outside") [0];
-			instance.HelmetGroup = audioMixer.FindMatchingGroups("Helmet") [0];
+
+            audioMixer.GetFloat("InVesselVolume", out instance.inVesselVolume);
+            audioMixer.GetFloat("OutsideVolume", out instance.outsideVolume);
+            audioMixer.GetFloat("InVesselCutoff", out instance.inVesselCutoff);
+            audioMixer.GetFloat("OutsideCutoff", out instance.outsideCutoff);
+            audioMixer.GetFloat("HelmetVolume", out instance.helmetVolume);
+
+            instance.MasterGroup = audioMixer.FindMatchingGroups("Master")[0];
+			instance.InVesselGroup = audioMixer.FindMatchingGroups("InVessel")[0];
+			instance.OutsideGroup = audioMixer.FindMatchingGroups("Outside")[0];
+			instance.HelmetGroup = audioMixer.FindMatchingGroups("Helmet")[0];
 			return instance;
 		}
+
+		public static void ResetMixer(AudioMixerFacade instance)
+		{
+			audioMixer.SetFloat("InVesselVolume", instance.inVesselVolume);
+			audioMixer.SetFloat("OutsideVolume", instance.outsideVolume);
+			audioMixer.SetFloat("InVesselCutoff", instance.inVesselCutoff);
+			audioMixer.SetFloat("OutsideCutoff", instance.outsideCutoff);
+			audioMixer.SetFloat("HelmetVolume", instance.helmetVolume);
+        }
 		
 		public static AudioMixer LoadBundle(string path)
 		{
@@ -73,7 +95,7 @@ namespace AudioMuffler {
 	
 				AssetBundle bundle = www.assetBundle;
 			
-				AudioMixer audioMixer = bundle.LoadAsset<AudioMixer> ("KSPAudioMixer");
+				AudioMixer audioMixer = bundle.LoadAsset<AudioMixer>("KSPAudioMixer");
 			
 				bundle.Unload(false);
 				www.Dispose();

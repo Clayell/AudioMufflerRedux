@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace AudioMuffler 
 {
@@ -11,11 +13,19 @@ namespace AudioMuffler
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class Muffler : MonoBehaviour
 	{
-	    private AudioMixerFacade audioMixer;
-		private VesselCacheManager cacheManager;
+	    internal static Muffler Instance { get; private set; }
+
+        private AudioMixerFacade audioMixer;
+		internal VesselCacheManager cacheManager;
+
+        private readonly Dictionary<AudioSource, AudioMixerGroup> originalMixerGroups = new Dictionary<AudioSource, AudioMixerGroup>();
+
+        public const float maxFrequency = 30000f;
 
         void Awake()
 	    {
+			Instance = this;
+			
 			cacheManager = new VesselCacheManager();
             //Camera.onPostRender += DebugPostRender;
         }
@@ -37,6 +47,11 @@ namespace AudioMuffler
 		{
             GameEvents.onVesselChange.Remove(VesselChange);
             GameEvents.onVesselWasModified.Remove(VesselWasModified);
+
+            if (Instance == this)
+            {
+                Instance = null;
+            }
         }
 
 	    void VesselChange(Vessel v)
@@ -91,7 +106,7 @@ namespace AudioMuffler
 				|| !AudioMufflerConfig.Instance.helmetForUnmanned && unmanned;
 			
 			//Setting up outside channel:
-			float atmosphericCutoff = Mathf.Lerp(AudioMufflerConfig.Instance.minimalCutoff, 30000, (float)FlightGlobals.ActiveVessel.atmDensity);
+			float atmosphericCutoff = Mathf.Lerp(AudioMufflerConfig.Instance.minimalCutoff, maxFrequency, (float)FlightGlobals.ActiveVessel.atmDensity);
 			if (earPart != null) {
 				audioMixer.SetOutsideCutoff(Mathf.Min(AudioMufflerConfig.Instance.wallCutoff, atmosphericCutoff));
 				audioMixer.SetInVesselVolume(-2f);
@@ -113,6 +128,11 @@ namespace AudioMuffler
 			//Routing all current audio sources:
 	        for (int i = 0; i < audioSources.Length; i++) {
 				AudioSource audioSource = audioSources[i];
+
+				if (!originalMixerGroups.ContainsKey(audioSource))
+				{
+					originalMixerGroups[audioSource] = audioSource.outputAudioMixerGroup;
+                }
 
 				/*
 					Hereafter audio sources that are bound to a part's InternalModel are handled differently from the rest because InternalModel has its own reference system,
@@ -211,6 +231,23 @@ namespace AudioMuffler
 				audioSource.outputAudioMixerGroup = audioMixer.OutsideGroup;
 	        }
 	    }
+
+		public void RestoreAudio()
+		{
+			AudioMixerFacade.ResetMixer(audioMixer);
+
+			for (int i = 0; i < originalMixerGroups.Count; i++)
+			{
+				AudioSource source = originalMixerGroups.ElementAt(i).Key;
+
+				if (source != null)
+				{
+					source.outputAudioMixerGroup = originalMixerGroups[source];
+                }
+            }
+
+            originalMixerGroups.Clear();
+        }
 	    
 		private bool IsSoundInHelmet(AudioSource audioSource) {
 			return !StockAudio.isAmbient(audioSource) && audioSource.transform.position == Vector3.zero;
