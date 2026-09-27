@@ -13,7 +13,7 @@ This is a continuation of SerTheGreat's [Audio Muffler Redux](https://github.com
 
 ## Links
 
-Downloading through [CKAN](https://github.com/KSP-CKAN/CKAN) is highly recommended.
+CKAN download is pending.
 
 Forum Thread: PLACEHOLDER
 
