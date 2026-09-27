@@ -13,3 +13,6 @@ resources:
   repository: https://github.com/Clayell/Audio-Muffler-Redux
   bugtracker: https://github.com/Clayell/Audio-Muffler-Redux/issues
   spacedock: https://spacedock.info/mod/4612/Audio%20Muffler%20Redux%20(AMR)
+depends:
+  - name: ClickThroughBlocker
+  - name: ToolbarController
