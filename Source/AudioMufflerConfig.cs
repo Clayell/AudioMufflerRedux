@@ -26,7 +26,7 @@ namespace AudioMuffler
         [KSPField(isPersistant = true)] public bool helmetInMapView = false;
         [KSPField(isPersistant = true)] public bool vesselInMapView = true;
         [KSPField(isPersistant = true)] public bool outsideInMapView = false;
-        [KSPField(isPersistant = true)] public bool roundValues = false;
+        [KSPField(isPersistant = true)] public bool roundValues = true;
         [KSPField(isPersistant = true)] public bool debug = false;
 
         [KSPField(isPersistant = true)] public int minCacheUpdateInterval = 300;
