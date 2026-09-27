@@ -9,13 +9,15 @@
 
 Audio Muffler Redux is a lightweight mod that mimics the effect of sound being muffled as the atmosphere around your vessel gets less and less dense. Instead of just lowering the volume, the mod gradually cuts off the higher frequencies of the audio, eventually leaving none left as you reach the vacuum of space. It is fully configurable via a GUI in-game which saves automatically, and requires no configuration files to work with mods.
 
+This is a continuation of SerTheGreat's [Audio Muffler Redux](https://github.com/SerTheGreat/Audio-Muffler-Redux) mod, which itself is a continuation of NovaSilisko's [Audio Muffler](https://spacedock.info/mod/262/Audio%20Muffler) mod.
+
 ## Links
 
 Downloading through [CKAN](https://github.com/KSP-CKAN/CKAN) is highly recommended.
 
 Forum Thread: PLACEHOLDER
 
-SpaceDock: PLACEHOLDER
+SpaceDock: https://spacedock.info/mod/4612/Audio%20Muffler%20Redux%20(AMR)
 
 Source Code: https://github.com/Clayell/AudioMufflerRedux/tree/master/Source
 
