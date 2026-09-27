@@ -35,5 +35,10 @@ Source Code: https://github.com/Clayell/AudioMufflerRedux/tree/master/Source
 ### License:
 This mod is subject to the CC-BY-NC-SA 4.0 license. (see [LICENSE.md](https://github.com/Clayell/AudioMufflerRedux/blob/master/LICENSE.md))
 
-### Showcase Video:
-[PLACEHOLDER]()
+### Media:
+
+#### Image:
+![UI](https://i.imgur.com/pv2zEfH.png)
+
+#### Showcase Video:
+[Audio Muffler Redux Showcase](https://youtu.be/MlUoWXpqC1A)
