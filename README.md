@@ -15,7 +15,7 @@ This is a continuation of SerTheGreat's [Audio Muffler Redux](https://github.com
 
 CKAN download is pending.
 
-Forum Thread: PLACEHOLDER
+Forum Thread: https://forum.kerbalspaceprogram.com/topic/231862-v3000-celestial-body-mover-cbm/
 
 SpaceDock: https://spacedock.info/mod/4612/Audio%20Muffler%20Redux%20(AMR)
 
