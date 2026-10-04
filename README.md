@@ -13,7 +13,7 @@ This is a continuation of SerTheGreat's [Audio Muffler Redux](https://github.com
 
 ## Links
 
-CKAN download is pending.
+Downloading through [CKAN](https://github.com/KSP-CKAN/CKAN) is highly recommended.
 
 Forum Thread: https://forum.kerbalspaceprogram.com/topic/231862-v3000-audio-muffler-redux-amr/
 
