@@ -9,6 +9,8 @@
 
 Audio Muffler Redux is a lightweight mod that mimics the effect of sound being muffled as the atmosphere around your vessel gets less and less dense. Instead of just lowering the volume, the mod gradually cuts off the higher frequencies of the audio, eventually leaving none left as you reach the vacuum of space. It is fully configurable via a GUI in-game which saves automatically, and requires no configuration files to work with mods.
 
+If the GUI slider is too coarse for you, you can edit the numbers manually by going into your `persistent.sfs` file and searching for the scenario with the name `AudioMufflerConfig`.
+
 This is a continuation of SerTheGreat's [Audio Muffler Redux](https://github.com/SerTheGreat/Audio-Muffler-Redux) mod, which itself is a continuation of NovaSilisko's [Audio Muffler](https://spacedock.info/mod/262/Audio%20Muffler) mod.
 
 ## Links
