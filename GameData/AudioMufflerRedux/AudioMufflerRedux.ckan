@@ -4,10 +4,6 @@ abstract: A simple mod that deadens the game's audio as your vessel goes into va
 description: This mod makes sounds feel more realistic by muffling your audio to lower and lower frequencies as the air around your vessel gets less and less dense. This is a continuation of the work of SerTheGreat and NovaSilisko.
 $vref: '#/ckan/ksp-avc'
 license: CC-BY-NC-SA-4.0
-author:
-  - Clayel
-  - Ser
-  - novasilisko
 resources:
   homepage: https://forum.kerbalspaceprogram.com/topic/231862-v3000-audio-muffler-redux-amr/
   repository: https://github.com/Clayell/Audio-Muffler-Redux
